@@ -1,0 +1,32 @@
+.log__layout {
+  width: 100%;
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.log__map {
+  width: 90%;
+  height: 60%;
+
+  border-radius: 20px;
+  box-shadow: 0 0 6px 6px rgba(0, 0, 0, 0.5);
+}
+
+.log_button {
+  width: 80px;
+  height: 32px;
+  margin-bottom: 40px;
+
+  background-color: var(--color-point);
+  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+}

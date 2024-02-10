@@ -1,0 +1,24 @@
+{
+  "name": "study_nextjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-kakao-maps-sdk": "^1.1.26"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.16",
+    "@types/react": "18.2.52",
+    "kakao.maps.d.ts": "^0.1.39",
+    "typescript": "5.3.3"
+  }
+}
