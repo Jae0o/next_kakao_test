@@ -8,44 +8,38 @@ interface Position {
   lng: number;
 }
 
-interface PathLineProps {
-  path: Position[];
-}
+const PathLine = () => {
+  const [path, setPath] = useState<Position[]>([]);
 
-const PathLine = ({ path }: PathLineProps) => {
-  // const [path, setPath] = useState<Position[]>([]);
+  const success = ({ coords }: GeolocationPosition) => {
+    const newPosition = {
+      lat: coords.latitude,
+      lng: coords.longitude,
+    };
+    setPath((prevPath) => [...prevPath, newPosition]);
+    console.log("path record", newPosition);
+  };
 
-  // const success = ({ coords }: GeolocationPosition) => {
-  //   const newPosition = {
-  //     lat: coords.latitude,
-  //     lng: coords.longitude,
-  //   };
-  //   setPath((prevPath) => [...prevPath, newPosition]);
-  //   console.log("path record", newPosition);
-  // };
+  const error = ({ code, message }: GeolocationPositionError) => {
+    console.log("path Error code", code);
+    console.log("path Error Message", message);
+  };
 
-  // const error = ({ code, message }: GeolocationPositionError) => {
-  //   console.log("path Error code", code);
-  //   console.log("path Error Message", message);
-  // };
+  const getPosition = () => {
+    navigator.geolocation.getCurrentPosition(success, error, {
+      enableHighAccuracy: true,
+    });
+  };
 
-  // const getPosition = () => {
-  //   navigator.geolocation.getCurrentPosition(success, error, {
-  //     enableHighAccuracy: true,
-  //   });
-  // };
+  useEffect(() => {
+    const intervalCode = setInterval(getPosition, 1000);
+    console.log("start path record", intervalCode);
 
-  // useEffect(() => {
-  //   if (!isRecording) return;
-
-  //   const intervalCode = setInterval(getPosition, 1000);
-  //   console.log("start path record", intervalCode);
-
-  //   return () => {
-  //     clearInterval(intervalCode);
-  //     console.log("end path record", intervalCode);
-  //   };
-  // }, [isRecording]);
+    return () => {
+      clearInterval(intervalCode);
+      console.log("end path record", intervalCode);
+    };
+  }, []);
 
   return (
     <>

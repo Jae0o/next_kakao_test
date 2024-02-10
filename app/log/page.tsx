@@ -80,7 +80,7 @@ const Log = () => {
 
       <Map center={center} className={style.log__map}>
         <MapMarker position={center} />
-        <PathLine path={path} />
+        {isRecording && <PathLine />}
       </Map>
       <h1>Center Fetch : {centerFetchCount}</h1>
       <h1>Error Count : {errorCount}</h1>
