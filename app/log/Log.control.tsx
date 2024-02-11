@@ -38,7 +38,7 @@ const LogPage = () => {
       });
 
       setPathFetchCount((prevCount) => prevCount + 1);
-    }, 3000)
+    }, 5000)
   ).current;
 
   const handleCenterSuccess = ({ coords }: GeolocationPosition) => {
