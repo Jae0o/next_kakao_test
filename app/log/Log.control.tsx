@@ -13,6 +13,7 @@ const LogPage = () => {
     errorCount,
     watchCode,
     centerFetchCount,
+    insertPathCount,
     setPath,
     setCenter,
     setPathFetchCount,
@@ -20,6 +21,7 @@ const LogPage = () => {
     setWatchCode,
     setCenterFetchCount,
     setErrorCount,
+    setInsertPathCount,
   } = useLogModel();
 
   const handlePathSuccess = ({ coords }: GeolocationPosition) => {
@@ -40,6 +42,8 @@ const LogPage = () => {
       }
 
       console.log("new Path Position", [...prevPath, newPosition]);
+
+      setInsertPathCount((prevCount) => prevCount + 1);
       return [...prevPath, newPosition];
     });
 
@@ -109,6 +113,7 @@ const LogPage = () => {
       centerFetchCount={centerFetchCount}
       pathFetchCount={pathFetchCount}
       errorCount={errorCount}
+      insertPathCount={insertPathCount}
       startRecord={startRecord}
       endRecord={endRecord}
     />
