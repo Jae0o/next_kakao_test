@@ -10,7 +10,8 @@
 
 .log__map {
   width: 90%;
-  height: 60%;
+  height: 50%;
+  min-height: 50%;
 
   border-radius: 20px;
   box-shadow: 0 0 6px 6px rgba(0, 0, 0, 0.5);
@@ -19,7 +20,7 @@
 .log_button {
   width: 80px;
   height: 32px;
-  margin-bottom: 40px;
+  margin: 20px;
 
   background-color: var(--color-point);
   box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.5);
@@ -29,4 +30,10 @@
   font-weight: 600;
 
   cursor: pointer;
+}
+
+.log__count {
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
 }

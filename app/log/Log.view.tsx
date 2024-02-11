@@ -50,10 +50,12 @@ const LogView = ({
           />
         )}
       </Map>
-      <h1>Center Fetch : {centerFetchCount}</h1>
-      <h1>Path Fetch : {pathFetchCount}</h1>
-      <h1>Error Count : {errorCount}</h1>
-      <h1>Path Count : {path.length}</h1>
+      <h1 className={style.log__count}>
+        Center Fetch Count : {centerFetchCount}
+      </h1>
+      <h1 className={style.log__count}>Path Fetch Count : {pathFetchCount}</h1>
+      <h1 className={style.log__count}>Error Count : {errorCount}</h1>
+      <h1 className={style.log__count}>Path Length Count : {path.length}</h1>
     </section>
   );
 };
