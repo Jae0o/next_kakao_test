@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Position } from "./Log.types";
 
 const DEFAULT_CENTER_POSITION = {
@@ -13,6 +13,20 @@ const useLogModel = () => {
   const [centerFetchCount, setCenterFetchCount] = useState(0);
   const [errorCount, setErrorCount] = useState(0);
   const [watchCode, setWatchCode] = useState(0);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }: GeolocationPosition) => {
+        setCenter({ lat: coords.latitude, lng: coords.latitude });
+        console.log("init Position", {
+          lat: coords.latitude,
+          lng: coords.longitude,
+        });
+      },
+      () => setCenter(DEFAULT_CENTER_POSITION),
+      { enableHighAccuracy: true }
+    );
+  }, []);
 
   return {
     center,

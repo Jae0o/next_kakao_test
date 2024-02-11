@@ -20,7 +20,7 @@ const LogPage = () => {
     setWatchCode,
   } = useLogModel();
 
-  const centerRecordSuccess = ({ coords }: GeolocationPosition) => {
+  const handleSuccess = ({ coords }: GeolocationPosition) => {
     const newPosition: Position = {
       lat: coords.latitude,
       lng: coords.longitude,
@@ -42,11 +42,9 @@ const LogPage = () => {
 
   const startRecord = useCallback(() => {
     const newWatchCode = navigator.geolocation.watchPosition(
-      centerRecordSuccess,
+      handleSuccess,
       handleError,
-      {
-        enableHighAccuracy: true,
-      }
+      { enableHighAccuracy: true }
     );
 
     console.log("start Center Record", watchCode);
