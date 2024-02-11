@@ -1,8 +1,10 @@
 "use client";
 
+import { useRef } from "react";
 import useLogModel from "./Log.model";
 import { Position } from "./Log.types";
 import LogView from "./Log.view";
+import { throttle } from "lodash";
 
 const LogPage = () => {
   const {
@@ -13,7 +15,7 @@ const LogPage = () => {
     errorCount,
     watchCode,
     centerFetchCount,
-    insertPathCount,
+
     setPath,
     setCenter,
     setPathFetchCount,
@@ -21,34 +23,23 @@ const LogPage = () => {
     setWatchCode,
     setCenterFetchCount,
     setErrorCount,
-    setInsertPathCount,
   } = useLogModel();
 
-  const handlePathSuccess = ({ coords }: GeolocationPosition) => {
-    const newPosition: Position = {
-      lat: coords.latitude,
-      lng: coords.longitude,
-    };
+  const handlePathSuccess = useRef(
+    throttle(({ coords }: GeolocationPosition) => {
+      const newPosition: Position = {
+        lat: coords.latitude,
+        lng: coords.longitude,
+      };
 
-    setPath((prevPath) => {
-      const prevPosition = prevPath[prevPath.length - 1];
+      setPath((prevPath) => {
+        console.log("new Path Position", [...prevPath, newPosition]);
+        return [...prevPath, newPosition];
+      });
 
-      if (
-        prevPosition &&
-        prevPosition.lat === newPosition.lat &&
-        prevPosition.lng === newPosition.lng
-      ) {
-        return prevPath;
-      }
-
-      console.log("new Path Position", [...prevPath, newPosition]);
-
-      setInsertPathCount((prevCount) => prevCount + 1);
-      return [...prevPath, newPosition];
-    });
-
-    setPathFetchCount((prevCount) => prevCount + 1);
-  };
+      setPathFetchCount((prevCount) => prevCount + 1);
+    }, 3000)
+  ).current;
 
   const handleCenterSuccess = ({ coords }: GeolocationPosition) => {
     const newPosition: Position = {
@@ -71,16 +62,19 @@ const LogPage = () => {
   };
 
   const startRecord = () => {
+    // GPS 가 움직였다 라고 판단되면 동작
+    // path
     const newPathWatchCode = navigator.geolocation.watchPosition(
       handlePathSuccess,
       handleError,
-      { enableHighAccuracy: true, maximumAge: 5000 }
+      { enableHighAccuracy: true }
     );
 
+    // pin
     const newCenterWatchCode = navigator.geolocation.watchPosition(
       handleCenterSuccess,
       handleError,
-      { enableHighAccuracy: true, maximumAge: 0 }
+      { enableHighAccuracy: true }
     );
 
     console.log("start Path Record", newPathWatchCode);
@@ -105,6 +99,8 @@ const LogPage = () => {
     console.log("Recording Path", path);
   };
 
+  // 사용자가 의도적으로 중단 버튼을 누르지 않고 페이지를 이동해버린 경우 - clear 동작이 안됨
+
   return (
     <LogView
       isRecording={isRecording}
@@ -113,7 +109,6 @@ const LogPage = () => {
       centerFetchCount={centerFetchCount}
       pathFetchCount={pathFetchCount}
       errorCount={errorCount}
-      insertPathCount={insertPathCount}
       startRecord={startRecord}
       endRecord={endRecord}
     />

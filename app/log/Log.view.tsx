@@ -10,7 +10,6 @@ interface LogViewProps {
   centerFetchCount: number;
   errorCount: number;
   pathFetchCount: number;
-  insertPathCount: number;
   startRecord: () => void;
   endRecord: () => void;
 }
@@ -22,7 +21,6 @@ const LogView = ({
   centerFetchCount,
   errorCount,
   pathFetchCount,
-  insertPathCount,
   startRecord,
   endRecord,
 }: LogViewProps) => {
@@ -42,7 +40,7 @@ const LogView = ({
 
       <Map center={center} className={style.log__map}>
         <MapMarker position={center} />
-        {isRecording && (
+        {path.length !== 0 && (
           <Polyline
             path={path}
             strokeColor="#ff7f50"
@@ -57,9 +55,6 @@ const LogView = ({
       </h1>
       <h1 className={style.log__count}>Path Fetch Count : {pathFetchCount}</h1>
       <h1 className={style.log__count}>Error Count : {errorCount}</h1>
-      <h1 className={style.log__count}>
-        insert Path Count : {insertPathCount}
-      </h1>
       <h1 className={style.log__count}>Path Length Count : {path.length}</h1>
     </section>
   );
