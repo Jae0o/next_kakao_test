@@ -11,14 +11,6 @@ const Navbar = () => {
       <Link href={"/log"} className={style.nav__button}>
         Log
       </Link>
-
-      <Link href={"/map"} className={style.nav__button}>
-        Map
-      </Link>
-
-      <Link href={"/test#testArea"} className={style.nav__button}>
-        Test
-      </Link>
     </nav>
   );
 };

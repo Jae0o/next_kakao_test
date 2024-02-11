@@ -60,6 +60,8 @@ const LogPage = () => {
     navigator.geolocation.clearWatch(watchCode);
 
     console.log("end Path Record", watchCode);
+
+    console.log("Recording Path", path);
   }, []);
 
   return (
