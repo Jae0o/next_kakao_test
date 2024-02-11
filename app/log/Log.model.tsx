@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Position } from "./Log.types";
 
 const DEFAULT_CENTER_POSITION = {
@@ -10,23 +10,13 @@ const useLogModel = () => {
   const [center, setCenter] = useState<Position>(DEFAULT_CENTER_POSITION);
   const [path, setPath] = useState<Position[]>([]);
   const [isRecording, setIsRecording] = useState(false);
-  const [centerFetchCount, setCenterFetchCount] = useState(0);
+  const [pathFetchCount, setPathFetchCount] = useState(0);
   const [errorCount, setErrorCount] = useState(0);
-  const [watchCode, setWatchCode] = useState(0);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }: GeolocationPosition) => {
-        setCenter({ lat: coords.latitude, lng: coords.latitude });
-        console.log("init Position", {
-          lat: coords.latitude,
-          lng: coords.longitude,
-        });
-      },
-      () => setCenter(DEFAULT_CENTER_POSITION),
-      { enableHighAccuracy: true }
-    );
-  }, []);
+  const [watchCode, setWatchCode] = useState({
+    center: 0,
+    path: 0,
+  });
+  const [centerFetchCount, setCenterFetchCount] = useState(0);
 
   return {
     center,
@@ -35,12 +25,14 @@ const useLogModel = () => {
     setPath,
     isRecording,
     setIsRecording,
-    centerFetchCount,
-    setCenterFetchCount,
+    pathFetchCount,
+    setPathFetchCount,
     errorCount,
     setErrorCount,
     watchCode,
     setWatchCode,
+    centerFetchCount,
+    setCenterFetchCount,
   };
 };
 

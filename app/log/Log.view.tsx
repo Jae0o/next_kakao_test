@@ -9,6 +9,7 @@ interface LogViewProps {
   path: Position[];
   centerFetchCount: number;
   errorCount: number;
+  pathFetchCount: number;
   startRecord: () => void;
   endRecord: () => void;
 }
@@ -19,6 +20,7 @@ const LogView = ({
   center,
   centerFetchCount,
   errorCount,
+  pathFetchCount,
   startRecord,
   endRecord,
 }: LogViewProps) => {
@@ -49,7 +51,9 @@ const LogView = ({
         )}
       </Map>
       <h1>Center Fetch : {centerFetchCount}</h1>
+      <h1>Path Fetch : {pathFetchCount}</h1>
       <h1>Error Count : {errorCount}</h1>
+      <h1>Path Count : {path.length}</h1>
     </section>
   );
 };

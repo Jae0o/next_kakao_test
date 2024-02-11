@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import useLogModel from "./Log.model";
 import { Position } from "./Log.types";
 import LogView from "./Log.view";
@@ -10,57 +9,97 @@ const LogPage = () => {
     isRecording,
     center,
     path,
-    centerFetchCount,
+    pathFetchCount,
     errorCount,
     watchCode,
+    centerFetchCount,
     setPath,
     setCenter,
-    setCenterFetchCount,
+    setPathFetchCount,
     setIsRecording,
     setWatchCode,
+    setCenterFetchCount,
+    setErrorCount,
   } = useLogModel();
 
-  const handleSuccess = ({ coords }: GeolocationPosition) => {
+  const handlePathSuccess = ({ coords }: GeolocationPosition) => {
     const newPosition: Position = {
       lat: coords.latitude,
       lng: coords.longitude,
     };
 
-    setPath((prevPath) => [...prevPath, newPosition]);
+    setPath((prevPath) => {
+      const prevPosition = prevPath[prevPath.length - 1];
 
-    setCenter(newPosition);
+      if (
+        prevPosition &&
+        prevPosition.lat === newPosition.lat &&
+        prevPosition.lng === newPosition.lng
+      ) {
+        return prevPath;
+      }
+
+      console.log("new Path Position", [...prevPath, newPosition]);
+      return [...prevPath, newPosition];
+    });
+
+    setPathFetchCount((prevCount) => prevCount + 1);
+  };
+
+  const handleCenterSuccess = ({ coords }: GeolocationPosition) => {
+    const newPosition: Position = {
+      lat: coords.latitude,
+      lng: coords.longitude,
+    };
+
+    setCenter(() => {
+      console.log("new Center Position", newPosition);
+      return newPosition;
+    });
 
     setCenterFetchCount((prevCount) => prevCount + 1);
-
-    console.log("new Center Position", newPosition);
   };
 
   const handleError = ({ message, code }: GeolocationPositionError) => {
     console.log("Error Code", code);
     console.log("Error Message", message);
+    setErrorCount((prevErrorCount) => prevErrorCount + 1);
   };
 
-  const startRecord = useCallback(() => {
-    const newWatchCode = navigator.geolocation.watchPosition(
-      handleSuccess,
+  const startRecord = () => {
+    const newPathWatchCode = navigator.geolocation.watchPosition(
+      handlePathSuccess,
       handleError,
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true, maximumAge: 5000 }
     );
 
-    console.log("start Center Record", watchCode);
+    const newCenterWatchCode = navigator.geolocation.watchPosition(
+      handleCenterSuccess,
+      handleError,
+      { enableHighAccuracy: true, maximumAge: 0 }
+    );
 
-    setWatchCode(newWatchCode);
+    console.log("start Path Record", newPathWatchCode);
+    console.log("start Center Record", newCenterWatchCode);
+
+    setWatchCode((prev) => ({
+      ...prev,
+      center: newCenterWatchCode,
+      path: newPathWatchCode,
+    }));
+
     setIsRecording(true);
-  }, []);
+  };
 
-  const endRecord = useCallback(() => {
+  const endRecord = () => {
     setIsRecording(false);
-    navigator.geolocation.clearWatch(watchCode);
+    console.log("clear", watchCode.center);
 
-    console.log("end Path Record", watchCode);
+    navigator.geolocation.clearWatch(watchCode.center);
+    navigator.geolocation.clearWatch(watchCode.path);
 
     console.log("Recording Path", path);
-  }, []);
+  };
 
   return (
     <LogView
@@ -68,6 +107,7 @@ const LogPage = () => {
       center={center}
       path={path}
       centerFetchCount={centerFetchCount}
+      pathFetchCount={pathFetchCount}
       errorCount={errorCount}
       startRecord={startRecord}
       endRecord={endRecord}
