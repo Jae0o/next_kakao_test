@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import useLogModel from "./Log.model";
 import { Position } from "./Log.types";
 import LogView from "./Log.view";
 import { throttle } from "lodash";
 import { useRouter } from "next/navigation";
+import { useUserLocation } from "../../store/useUserLocation";
 
 const LogPage = () => {
   const {
@@ -17,6 +18,7 @@ const LogPage = () => {
     watchCode,
     centerFetchCount,
     pathRange,
+    pinList,
 
     setPath,
     setCenter,
@@ -26,8 +28,22 @@ const LogPage = () => {
     setCenterFetchCount,
     setErrorCount,
     setPathRange,
+    setPinList,
   } = useLogModel();
   const router = useRouter();
+
+  const { fetchLocation } = useUserLocation();
+
+  useEffect(() => {
+    return () => {
+      // watch에 대한 클린업을 진행
+      if (!watchCode) {
+        return;
+      }
+
+      navigator.geolocation.clearWatch(watchCode);
+    };
+  }, []);
 
   const changePath = useRef(
     throttle(({ lat, lng }: Position) => {
@@ -78,6 +94,19 @@ const LogPage = () => {
     setIsRecording(false);
 
     navigator.geolocation.clearWatch(watchCode);
+
+    // 위치 측정 종료시 현재 위치를 store에 저장함
+    const getCurrentLocationSuccess = ({ coords }: GeolocationPosition) => {
+      fetchLocation({
+        lat: coords.latitude,
+        lng: coords.longitude,
+      });
+    };
+    navigator.geolocation.getCurrentPosition(
+      getCurrentLocationSuccess,
+      handleWatchError,
+      { enableHighAccuracy: true }
+    );
   };
 
   const getPolyLineInfo = (polyLine: kakao.maps.Polyline) => {
@@ -86,8 +115,23 @@ const LogPage = () => {
     setPathRange(newRange);
   };
 
-  // 사용자가 의도적으로 중단 버튼을 누르지 않고 페이지를 이동해버린 경우 - clear 동작이 안됨
+  const insertSuccess = ({ coords }: GeolocationPosition) => {
+    const newPinPoint = {
+      lat: coords.latitude,
+      lng: coords.longitude,
+    };
 
+    setPinList((prevList) => [...prevList, newPinPoint]);
+  };
+
+  const handleInsertPin = () => {
+    console.log("rrr");
+    navigator.geolocation.getCurrentPosition(insertSuccess, handleWatchError, {
+      enableHighAccuracy: true,
+    });
+  };
+
+  console.log(pinList);
   return (
     <LogView
       isRecording={isRecording}
@@ -97,10 +141,12 @@ const LogPage = () => {
       centerFetchCount={centerFetchCount}
       pathFetchCount={pathFetchCount}
       errorCount={errorCount}
+      pinList={pinList}
       startRecord={startRecord}
       endRecord={endRecord}
       onClickFallback={() => router.back()}
       onCreate={getPolyLineInfo}
+      insertPin={handleInsertPin}
     />
   );
 };

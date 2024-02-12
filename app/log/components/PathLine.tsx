@@ -10,7 +10,7 @@ const PathLine = ({ path, onCreate }: PathLineProps) => {
   return (
     <Polyline
       path={path}
-      strokeColor="#ff7f50"
+      strokeColor="#7cbe13"
       strokeStyle="solid"
       strokeWeight={8}
       strokeOpacity={0.6}

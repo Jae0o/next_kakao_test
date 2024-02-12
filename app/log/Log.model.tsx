@@ -5,7 +5,7 @@ import { useUserLocation } from "../../store/useUserLocation";
 const useLogModel = () => {
   const { currentLocation } = useUserLocation();
 
-  // 현재 사용자 위치
+  // 현재 사용자 마커 위치
   const [center, setCenter] = useState<Position>(currentLocation);
   // 사용자 이동 경로
   const [path, setPath] = useState<Position[]>([]);
@@ -15,6 +15,11 @@ const useLogModel = () => {
   const [pathRange, setPathRange] = useState(0);
   // 감시 동작 코드 - 측정 종료시 clear 동작
   const [watchCode, setWatchCode] = useState(0);
+  // Pin 리스트
+  const [pinList, setPinList] = useState<Position[]>([]);
+
+  // Drag 상태
+  // const [isDragging, setIsDragging] = useState(false);
 
   // Test Count 들
   const [pathFetchCount, setPathFetchCount] = useState(0);
@@ -38,6 +43,8 @@ const useLogModel = () => {
     setCenterFetchCount,
     pathRange,
     setPathRange,
+    pinList,
+    setPinList,
   };
 };
 
