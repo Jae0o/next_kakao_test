@@ -115,23 +115,10 @@ const LogPage = () => {
     setPathRange(newRange);
   };
 
-  const insertSuccess = ({ coords }: GeolocationPosition) => {
-    const newPinPoint = {
-      lat: coords.latitude,
-      lng: coords.longitude,
-    };
-
-    setPinList((prevList) => [...prevList, newPinPoint]);
-  };
-
   const handleInsertPin = () => {
-    console.log("rrr");
-    navigator.geolocation.getCurrentPosition(insertSuccess, handleWatchError, {
-      enableHighAccuracy: true,
-    });
+    setPinList((prevList) => [...prevList, center]);
   };
 
-  console.log(pinList);
   return (
     <LogView
       isRecording={isRecording}
