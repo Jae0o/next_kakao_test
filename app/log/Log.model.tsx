@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Position } from "./Log.types";
+import { useUserLocation } from "../../store/useUserLocation";
 
 const DEFAULT_CENTER_POSITION = {
   lat: 33.450701,
@@ -7,7 +8,8 @@ const DEFAULT_CENTER_POSITION = {
 };
 
 const useLogModel = () => {
-  const [center, setCenter] = useState<Position>(DEFAULT_CENTER_POSITION);
+  const { currentLocation } = useUserLocation();
+  const [center, setCenter] = useState<Position>(currentLocation);
   const [path, setPath] = useState<Position[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [pathFetchCount, setPathFetchCount] = useState(0);
