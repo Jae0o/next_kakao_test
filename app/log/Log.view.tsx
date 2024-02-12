@@ -1,7 +1,7 @@
 import React from "react";
 import style from "./Log.style.module.css";
 import { Position } from "./Log.types";
-import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import { Map } from "react-kakao-maps-sdk";
 import PathLine from "./components/PathLine";
 import CenterMarker from "./components/CenterMarker";
 import FallbackIcon from "./components/FallbackIcon";
@@ -13,9 +13,11 @@ interface LogViewProps {
   centerFetchCount: number;
   errorCount: number;
   pathFetchCount: number;
+  pathRange: number;
   startRecord: () => void;
   endRecord: () => void;
   onClickFallback: () => void;
+  onCreate: (param: kakao.maps.Polyline) => void;
 }
 
 const LogView = ({
@@ -24,16 +26,18 @@ const LogView = ({
   center,
   centerFetchCount,
   errorCount,
+  pathRange,
   pathFetchCount,
   startRecord,
   endRecord,
   onClickFallback,
+  onCreate,
 }: LogViewProps) => {
   return (
     <section className={style.log__layout}>
       <Map center={center} className={style.log__map}>
         <CenterMarker center={center} />
-        {path.length !== 0 && <PathLine path={path} />}
+        {path.length !== 0 && <PathLine path={path} onCreate={onCreate} />}
       </Map>
 
       <button className={style.log__fallback} onClick={onClickFallback}>
@@ -66,7 +70,7 @@ const LogView = ({
           <>
             <div className={style.log__record_container}>
               <p className={style.log__record}> 25 : 25 : 25</p>
-              <p className={style.log__record}> 100.40 km</p>
+              <p className={style.log__record}> {`${pathRange} M`}</p>
             </div>
             <button onClick={endRecord} className={style.log_button}>
               end

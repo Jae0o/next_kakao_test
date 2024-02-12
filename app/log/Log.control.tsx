@@ -16,6 +16,7 @@ const LogPage = () => {
     errorCount,
     watchCode,
     centerFetchCount,
+    pathRange,
 
     setPath,
     setCenter,
@@ -24,6 +25,7 @@ const LogPage = () => {
     setWatchCode,
     setCenterFetchCount,
     setErrorCount,
+    setPathRange,
   } = useLogModel();
   const router = useRouter();
   const handlePathSuccess = useRef(
@@ -88,6 +90,12 @@ const LogPage = () => {
     navigator.geolocation.clearWatch(watchCode.path);
   };
 
+  const getPolyLineInfo = (polyLine: kakao.maps.Polyline) => {
+    const newRange = Math.floor(polyLine.getLength());
+
+    setPathRange(newRange);
+  };
+
   // 사용자가 의도적으로 중단 버튼을 누르지 않고 페이지를 이동해버린 경우 - clear 동작이 안됨
 
   return (
@@ -95,12 +103,14 @@ const LogPage = () => {
       isRecording={isRecording}
       center={center}
       path={path}
+      pathRange={pathRange}
       centerFetchCount={centerFetchCount}
       pathFetchCount={pathFetchCount}
       errorCount={errorCount}
       startRecord={startRecord}
       endRecord={endRecord}
       onClickFallback={() => router.back()}
+      onCreate={getPolyLineInfo}
     />
   );
 };

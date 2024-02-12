@@ -15,6 +15,7 @@ const useLogModel = () => {
     center: 0,
     path: 0,
   });
+  const [pathRange, setPathRange] = useState(0);
 
   return {
     center,
@@ -31,6 +32,8 @@ const useLogModel = () => {
     setWatchCode,
     centerFetchCount,
     setCenterFetchCount,
+    pathRange,
+    setPathRange,
   };
 };
 

@@ -3,9 +3,10 @@ import { Position } from "../Log.types";
 
 interface PathLineProps {
   path: Position[];
+  onCreate: (param: kakao.maps.Polyline) => void;
 }
 
-const PathLine = ({ path }: PathLineProps) => {
+const PathLine = ({ path, onCreate }: PathLineProps) => {
   return (
     <Polyline
       path={path}
@@ -13,6 +14,7 @@ const PathLine = ({ path }: PathLineProps) => {
       strokeStyle="solid"
       strokeWeight={8}
       strokeOpacity={0.6}
+      onCreate={onCreate}
     />
   );
 };
