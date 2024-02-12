@@ -32,32 +32,24 @@ const LogPage = () => {
         lng: coords.longitude,
       };
 
-      setPath((prevPath) => {
-        console.log("new Path Position", [...prevPath, newPosition]);
-        return [...prevPath, newPosition];
-      });
+      setPath((prevPath) => [...prevPath, newPosition]);
 
+      // 테스트를 위한 Path Watch 동작 Count
       setPathFetchCount((prevCount) => prevCount + 1);
     }, 5000)
   ).current;
 
-  const handleCenterSuccess = ({ coords }: GeolocationPosition) => {
-    const newPosition: Position = {
+  const handleCenterWatch = ({ coords }: GeolocationPosition) => {
+    setCenter({
       lat: coords.latitude,
       lng: coords.longitude,
-    };
-
-    setCenter(() => {
-      console.log("new Center Position", newPosition);
-      return newPosition;
     });
 
+    // 테스트를 위한 Center Watch 동작 Count
     setCenterFetchCount((prevCount) => prevCount + 1);
   };
 
-  const handleError = ({ message, code }: GeolocationPositionError) => {
-    console.log("Error Code", code);
-    console.log("Error Message", message);
+  const handleError = () => {
     setErrorCount((prevErrorCount) => prevErrorCount + 1);
   };
 
@@ -72,13 +64,10 @@ const LogPage = () => {
 
     // pin
     const newCenterWatchCode = navigator.geolocation.watchPosition(
-      handleCenterSuccess,
+      handleCenterWatch,
       handleError,
       { enableHighAccuracy: true }
     );
-
-    console.log("start Path Record", newPathWatchCode);
-    console.log("start Center Record", newCenterWatchCode);
 
     setWatchCode((prev) => ({
       ...prev,
@@ -91,12 +80,9 @@ const LogPage = () => {
 
   const endRecord = () => {
     setIsRecording(false);
-    console.log("clear", watchCode.center);
 
     navigator.geolocation.clearWatch(watchCode.center);
     navigator.geolocation.clearWatch(watchCode.path);
-
-    console.log("Recording Path", path);
   };
 
   // 사용자가 의도적으로 중단 버튼을 누르지 않고 페이지를 이동해버린 경우 - clear 동작이 안됨
