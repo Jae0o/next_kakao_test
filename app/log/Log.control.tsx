@@ -28,66 +28,56 @@ const LogPage = () => {
     setPathRange,
   } = useLogModel();
   const router = useRouter();
-  const handlePathSuccess = useRef(
-    throttle(({ coords }: GeolocationPosition) => {
-      const newPosition: Position = {
-        lat: coords.latitude,
-        lng: coords.longitude,
-      };
 
-      setPath((prevPath) => [...prevPath, newPosition]);
+  const changePath = useRef(
+    throttle(({ lat, lng }: Position) => {
+      setPath((prevPath) => [...prevPath, { lat, lng }]);
 
       // 테스트를 위한 Path Watch 동작 Count
       setPathFetchCount((prevCount) => prevCount + 1);
     }, 5000)
   ).current;
 
-  const handleCenterWatch = useRef(
-    throttle(({ coords }: GeolocationPosition) => {
-      setCenter({
-        lat: coords.latitude,
-        lng: coords.longitude,
-      });
+  const changeCenter = useRef(
+    throttle(({ lat, lng }: Position) => {
+      setCenter({ lat, lng });
 
       // 테스트를 위한 Center Watch 동작 Count
       setCenterFetchCount((prevCount) => prevCount + 1);
     }, 200)
   ).current;
 
-  const handleError = () => {
+  const handleWatchSuccess = ({ coords }: GeolocationPosition) => {
+    const newPosition: Position = {
+      lat: coords.latitude,
+      lng: coords.longitude,
+    };
+
+    changePath(newPosition);
+    changeCenter(newPosition);
+  };
+
+  const handleWatchError = () => {
     setErrorCount((prevErrorCount) => prevErrorCount + 1);
   };
 
   const startRecord = () => {
     // GPS 가 움직였다 라고 판단되면 동작
     // path
-    const newPathWatchCode = navigator.geolocation.watchPosition(
-      handlePathSuccess,
-      handleError,
+    const newWatchCode = navigator.geolocation.watchPosition(
+      handleWatchSuccess,
+      handleWatchError,
       { enableHighAccuracy: true }
     );
 
-    // pin
-    const newCenterWatchCode = navigator.geolocation.watchPosition(
-      handleCenterWatch,
-      handleError,
-      { enableHighAccuracy: true }
-    );
-
-    setWatchCode((prev) => ({
-      ...prev,
-      center: newCenterWatchCode,
-      path: newPathWatchCode,
-    }));
-
+    setWatchCode(newWatchCode);
     setIsRecording(true);
   };
 
   const endRecord = () => {
     setIsRecording(false);
 
-    navigator.geolocation.clearWatch(watchCode.center);
-    navigator.geolocation.clearWatch(watchCode.path);
+    navigator.geolocation.clearWatch(watchCode);
   };
 
   const getPolyLineInfo = (polyLine: kakao.maps.Polyline) => {
