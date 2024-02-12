@@ -9,7 +9,7 @@ const HomeControl = () => {
 
   const success = ({ coords }: GeolocationPosition) => {
     const { latitude, longitude } = coords;
-    router.push(`/log?lat=${latitude}&lng=${longitude}`);
+    router.push(`/log/?lat=${latitude}&lng=${longitude}`);
   };
 
   const error = () => {

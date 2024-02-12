@@ -1,5 +1,3 @@
-"use client";
-
 import LogPage from "./Log.control";
 
 const Log = () => {
