@@ -22,7 +22,7 @@ const HomeControl = () => {
   // };
 
   const handleClick = () => {
-    router.push(`/log`);
+    router.push("/log");
   };
 
   return <HomeView onClick={handleClick} />;
