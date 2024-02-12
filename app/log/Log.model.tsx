@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Position } from "./Log.types";
+import { useSearchParams } from "next/navigation";
 
 const DEFAULT_CENTER_POSITION = {
   lat: 33.450701,
@@ -7,7 +8,12 @@ const DEFAULT_CENTER_POSITION = {
 };
 
 const useLogModel = () => {
-  const [center, setCenter] = useState<Position>(DEFAULT_CENTER_POSITION);
+  const searchParams = useSearchParams();
+  const [center, setCenter] = useState<Position>({
+    lat: +searchParams.get("lat"),
+    lng: +searchParams.get("lng"),
+  });
+
   const [path, setPath] = useState<Position[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [pathFetchCount, setPathFetchCount] = useState(0);
