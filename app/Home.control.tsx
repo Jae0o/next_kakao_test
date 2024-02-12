@@ -7,9 +7,10 @@ import { useUserLocation } from "../store/useUserLocation";
 
 const HomeControl = () => {
   const router = useRouter();
-  const { fetchLocation } = useUserLocation();
+  const { fetchLocation, isLoading, setLoading } = useUserLocation();
 
   useEffect(() => {
+    setLoading(true);
     // 해당 부분의 동작은 추후 로그인과 동시에 진행되면 좋을 것 같음!
     // 정책에 위배 되지 않기 위해서 그리고 로그인과 동시에 위치에 대한 동의도 받기 위해서
 
@@ -25,16 +26,20 @@ const HomeControl = () => {
         lat: coords.latitude,
         lng: coords.longitude,
       });
+
+      setLoading(false);
     };
 
     navigator.geolocation.getCurrentPosition(success);
-  });
+  }, []);
 
   const handleClick = () => {
     router.push("/log");
   };
 
-  return <HomeView onClick={handleClick} />;
+  console.log(isLoading);
+
+  return <HomeView onClick={handleClick} isLoading={isLoading} />;
 };
 
 export default HomeControl;

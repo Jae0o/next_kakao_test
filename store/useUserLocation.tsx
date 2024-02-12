@@ -8,17 +8,20 @@ const DEFAULT_CENTER_POSITION = {
 
 interface UseUserLocation {
   currentLocation: Position;
-
+  isLoading: boolean;
   fetchLocation: (param: Position) => void;
+  setLoading: (value: boolean) => void;
 }
 
 export const useUserLocation = create<UseUserLocation>((set) => ({
-  currentLocation: {
-    lat: 0,
-    lng: 0,
-  },
+  currentLocation: DEFAULT_CENTER_POSITION,
+  isLoading: false,
 
   fetchLocation: ({ lat, lng }) => {
     set(() => ({ currentLocation: { lat, lng } }));
+  },
+
+  setLoading: (isLoading) => {
+    set(() => ({ isLoading }));
   },
 }));
