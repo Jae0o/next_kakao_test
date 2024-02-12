@@ -10,10 +10,7 @@ const DEFAULT_CENTER_POSITION = {
 const useLogModel = () => {
   const searchParams = useSearchParams();
 
-  const [center, setCenter] = useState<Position>({
-    lat: +searchParams.get("lat"),
-    lng: +searchParams.get("lng"),
-  });
+  const [center, setCenter] = useState<Position>(DEFAULT_CENTER_POSITION);
   const [path, setPath] = useState<Position[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [pathFetchCount, setPathFetchCount] = useState(0);
