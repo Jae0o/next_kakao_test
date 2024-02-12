@@ -2,6 +2,8 @@ import React from "react";
 import style from "./Log.style.module.css";
 import { Position } from "./Log.types";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import PathLine from "./components/PathLine";
+import CenterMarker from "./components/CenterMarker";
 
 interface LogViewProps {
   isRecording: boolean;
@@ -27,16 +29,8 @@ const LogView = ({
   return (
     <section className={style.log__layout}>
       <Map center={center} className={style.log__map}>
-        <MapMarker position={center} />
-        {path.length !== 0 && (
-          <Polyline
-            path={path}
-            strokeColor="#ff7f50"
-            strokeStyle="solid"
-            strokeWeight={10}
-            strokeOpacity={1}
-          />
-        )}
+        <CenterMarker center={center} />
+        {path.length !== 0 && <PathLine path={path} />}
       </Map>
 
       {/* Count Information Container */}
