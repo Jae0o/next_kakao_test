@@ -10,6 +10,16 @@ const HomeControl = () => {
   const { fetchLocation } = useUserLocation();
 
   useEffect(() => {
+    // 해당 부분의 동작은 추후 로그인과 동시에 진행되면 좋을 것 같음!
+    // 정책에 위배 되지 않기 위해서 그리고 로그인과 동시에 위치에 대한 동의도 받기 위해서
+
+    /* 문제
+
+      현재 사용자의 위치를 useEffect를 통해 사용자의 액션 없이 위치 정보를 얻는 행동은 정책에 위배됨
+      
+      따라서 이후 버튼을 클릭하고 아래 위치에 대한 정보를 수집한다는 안내도 추후에 진행해야할것으로 생각됨
+
+    */
     const success = ({ coords }: GeolocationPosition) => {
       fetchLocation({
         lat: coords.latitude,
@@ -19,20 +29,6 @@ const HomeControl = () => {
 
     navigator.geolocation.getCurrentPosition(success);
   });
-
-  // const success = ({ coords }: GeolocationPosition) => {
-  //   const { latitude, longitude } = coords;
-
-  //   if (typeof window === "undefined") {
-  //     return;
-  //   }
-
-  //   router.push(`/log/?lat=${latitude}&lng=${longitude}`);
-  // };
-
-  // const error = () => {
-  //   alert("위치 정보를 받아오는데 실패함");
-  // };
 
   const handleClick = () => {
     router.push("/log");

@@ -16,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
+        {/* 반드시 한번은 script를 호출해야 정상적인 Map 사용 가능 */}
         <Script src={KAKAO_URL} strategy={"beforeInteractive"} />
         {children}
       </body>

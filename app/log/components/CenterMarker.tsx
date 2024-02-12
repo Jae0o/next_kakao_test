@@ -7,6 +7,9 @@ interface CenterMarkerProps {
 }
 
 const CenterMarker = ({ center }: CenterMarkerProps) => {
+  // 추후 서비스의 마스코트로 변경 하면 좋을 것 같음!
+
+  // 현재 사용자의 위치를 알려주기 위한 center pin
   return (
     <CustomOverlayMap position={center}>
       <div className={style.center__pin}>
