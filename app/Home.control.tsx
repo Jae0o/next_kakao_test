@@ -1,11 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import HomeView from "./Home.view";
 import { useRouter } from "next/navigation";
+import { useUserLocation } from "../store/useUserLocation";
 
 const HomeControl = () => {
   const router = useRouter();
+  const { fetchLocation } = useUserLocation();
+
+  useEffect(() => {
+    const success = ({ coords }: GeolocationPosition) => {
+      fetchLocation({
+        lat: coords.latitude,
+        lng: coords.longitude,
+      });
+    };
+
+    navigator.geolocation.getCurrentPosition(success);
+  });
 
   // const success = ({ coords }: GeolocationPosition) => {
   //   const { latitude, longitude } = coords;
