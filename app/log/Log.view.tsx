@@ -4,6 +4,7 @@ import { Position } from "./Log.types";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import PathLine from "./components/PathLine";
 import CenterMarker from "./components/CenterMarker";
+import FallbackIcon from "./components/FallbackIcon";
 
 interface LogViewProps {
   isRecording: boolean;
@@ -14,6 +15,7 @@ interface LogViewProps {
   pathFetchCount: number;
   startRecord: () => void;
   endRecord: () => void;
+  onClickFallback: () => void;
 }
 
 const LogView = ({
@@ -25,6 +27,7 @@ const LogView = ({
   pathFetchCount,
   startRecord,
   endRecord,
+  onClickFallback,
 }: LogViewProps) => {
   return (
     <section className={style.log__layout}>
@@ -32,6 +35,10 @@ const LogView = ({
         <CenterMarker center={center} />
         {path.length !== 0 && <PathLine path={path} />}
       </Map>
+
+      <button className={style.log__fallback} onClick={onClickFallback}>
+        <FallbackIcon />
+      </button>
 
       {/* Count Information Container */}
       <ul className={style.log__count_list}>

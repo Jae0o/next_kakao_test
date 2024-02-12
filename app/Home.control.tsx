@@ -37,8 +37,6 @@ const HomeControl = () => {
     router.push("/log");
   };
 
-  console.log(isLoading);
-
   return <HomeView onClick={handleClick} isLoading={isLoading} />;
 };
 

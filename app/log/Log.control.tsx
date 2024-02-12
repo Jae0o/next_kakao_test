@@ -5,6 +5,7 @@ import useLogModel from "./Log.model";
 import { Position } from "./Log.types";
 import LogView from "./Log.view";
 import { throttle } from "lodash";
+import { useRouter } from "next/navigation";
 
 const LogPage = () => {
   const {
@@ -24,7 +25,7 @@ const LogPage = () => {
     setCenterFetchCount,
     setErrorCount,
   } = useLogModel();
-
+  const router = useRouter();
   const handlePathSuccess = useRef(
     throttle(({ coords }: GeolocationPosition) => {
       const newPosition: Position = {
@@ -39,15 +40,17 @@ const LogPage = () => {
     }, 5000)
   ).current;
 
-  const handleCenterWatch = ({ coords }: GeolocationPosition) => {
-    setCenter({
-      lat: coords.latitude,
-      lng: coords.longitude,
-    });
+  const handleCenterWatch = useRef(
+    throttle(({ coords }: GeolocationPosition) => {
+      setCenter({
+        lat: coords.latitude,
+        lng: coords.longitude,
+      });
 
-    // 테스트를 위한 Center Watch 동작 Count
-    setCenterFetchCount((prevCount) => prevCount + 1);
-  };
+      // 테스트를 위한 Center Watch 동작 Count
+      setCenterFetchCount((prevCount) => prevCount + 1);
+    }, 200)
+  ).current;
 
   const handleError = () => {
     setErrorCount((prevErrorCount) => prevErrorCount + 1);
@@ -97,6 +100,7 @@ const LogPage = () => {
       errorCount={errorCount}
       startRecord={startRecord}
       endRecord={endRecord}
+      onClickFallback={() => router.back()}
     />
   );
 };
