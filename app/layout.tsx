@@ -1,6 +1,5 @@
 import "../styles/Global.css";
 import Script from "next/script";
-import Navbar from "./components/Navbar";
 
 export const metadata = {
   title: "KaKao Map Test",
@@ -18,8 +17,6 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <Script src={KAKAO_URL} strategy={"beforeInteractive"} />
-
-        <Navbar />
         {children}
       </body>
     </html>

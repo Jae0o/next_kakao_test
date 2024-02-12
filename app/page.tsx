@@ -1,3 +1,7 @@
-export default function Page() {
-  return <section>is Home</section>;
-}
+import HomeControl from "./Home.control";
+
+const HomePage = () => {
+  return <HomeControl />;
+};
+
+export default HomePage;
