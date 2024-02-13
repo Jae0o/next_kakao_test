@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Position } from "./Log.types";
-import { useUserLocation } from "../../store/useUserLocation";
+import { useState } from 'react';
+import { Position } from './Log.types';
+import { useUserLocation } from '../../store/useUserLocation';
 
 const useLogModel = () => {
   const { currentLocation } = useUserLocation();
@@ -26,6 +26,9 @@ const useLogModel = () => {
   const [errorCount, setErrorCount] = useState(0);
   const [centerFetchCount, setCenterFetchCount] = useState(0);
 
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+
   return {
     center,
     setCenter,
@@ -45,6 +48,10 @@ const useLogModel = () => {
     setPathRange,
     pinList,
     setPinList,
+    recordingTime,
+    setRecordingTime,
+    timerId,
+    setTimerId,
   };
 };
 

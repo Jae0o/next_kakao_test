@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import useLogModel from "./Log.model";
-import { Position } from "./Log.types";
-import LogView from "./Log.view";
-import { throttle } from "lodash";
-import { useRouter } from "next/navigation";
-import { useUserLocation } from "../../store/useUserLocation";
+import { useEffect, useRef } from 'react';
+import useLogModel from './Log.model';
+import { Position } from './Log.types';
+import LogView from './Log.view';
+import { throttle } from 'lodash';
+import { useRouter } from 'next/navigation';
+import { useUserLocation } from '../../store/useUserLocation';
 
 const LogPage = () => {
   const {
@@ -19,6 +19,8 @@ const LogPage = () => {
     centerFetchCount,
     pathRange,
     pinList,
+    recordingTime,
+    timerId,
 
     setPath,
     setCenter,
@@ -29,6 +31,8 @@ const LogPage = () => {
     setErrorCount,
     setPathRange,
     setPinList,
+    setRecordingTime,
+    setTimerId,
   } = useLogModel();
   const router = useRouter();
 
@@ -45,11 +49,25 @@ const LogPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isRecording) {
+      const id = setInterval(() => {
+        setRecordingTime((prevTime) => (prevTime += 1));
+      }, 1000);
+      setTimerId(id);
+    } else {
+      if (timerId) {
+        clearInterval(timerId);
+        setTimerId(null);
+      }
+      setRecordingTime(0);
+    }
+  }, [isRecording]);
+
   const changePath = useRef(
     throttle(({ lat, lng }: Position) => {
       setPath((prevPath) => [...prevPath, { lat, lng }]);
 
-      // 테스트를 위한 Path Watch 동작 Count
       setPathFetchCount((prevCount) => prevCount + 1);
     }, 5000)
   ).current;
@@ -134,6 +152,7 @@ const LogPage = () => {
       onClickFallback={() => router.back()}
       onCreate={getPolyLineInfo}
       insertPin={handleInsertPin}
+      recordingTime={recordingTime}
     />
   );
 };

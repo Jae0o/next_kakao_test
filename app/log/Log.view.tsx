@@ -1,10 +1,10 @@
-import React from "react";
-import style from "./Log.style.module.css";
-import { Position } from "./Log.types";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-import PathLine from "./components/PathLine";
-import CenterMarker from "./components/CenterMarker";
-import FallbackIcon from "./components/FallbackIcon";
+import React from 'react';
+import style from './Log.style.module.css';
+import { Position } from './Log.types';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import PathLine from './components/PathLine';
+import CenterMarker from './components/CenterMarker';
+import FallbackIcon from './components/FallbackIcon';
 
 interface LogViewProps {
   isRecording: boolean;
@@ -15,6 +15,7 @@ interface LogViewProps {
   pathFetchCount: number;
   pathRange: number;
   pinList: Position[];
+  recordingTime: number;
   startRecord: () => void;
   endRecord: () => void;
   onClickFallback: () => void;
@@ -31,6 +32,7 @@ const LogView = ({
   pathRange,
   pathFetchCount,
   pinList,
+  recordingTime,
   startRecord,
   endRecord,
   onClickFallback,
@@ -82,7 +84,11 @@ const LogView = ({
             </button>
             <div className={style.log__action_container}>
               <div className={style.log__record_container}>
-                <p className={style.log__record}> 25 : 25 : 25</p>
+                <p className={style.log__record}>{`
+                  ${Math.floor(recordingTime / 3600)}시
+                  ${Math.floor((recordingTime % 3600) / 60)}분
+                  ${recordingTime % 60}초
+                `}</p>
                 <p className={style.log__record}> {`${pathRange} M`}</p>
               </div>
               <button onClick={endRecord} className={style.log_button}>
