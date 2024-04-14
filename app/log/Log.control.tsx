@@ -1,12 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import useLogModel from './Log.model';
-import { Position } from './Log.types';
-import LogView from './Log.view';
-import { throttle } from 'lodash';
-import { useRouter } from 'next/navigation';
-import { useUserLocation } from '../../store/useUserLocation';
+import { useEffect, useRef } from "react";
+import useLogModel from "./Log.model";
+import { Position } from "./Log.types";
+import LogView from "./Log.view";
+import { throttle } from "lodash";
+import { useRouter } from "next/navigation";
+import { useUserLocation } from "../../store/useUserLocation";
+import distanceFilter from "../../util/distanceFilter";
 
 const LogPage = () => {
   const {
@@ -65,10 +66,21 @@ const LogPage = () => {
   }, [isRecording]);
 
   const changePath = useRef(
-    throttle(({ lat, lng }: Position) => {
-      setPath((prevPath) => [...prevPath, { lat, lng }]);
+    throttle((newPosition: Position) => {
+      setPath((prevPath) => {
+        const prevPosition = prevPath[prevPath.length - 1];
 
-      setPathFetchCount((prevCount) => prevCount + 1);
+        if (prevPosition) {
+          const pointDistance = distanceFilter(newPosition, prevPosition);
+
+          if (pointDistance < 25 || pointDistance > 80) {
+            return prevPath;
+          }
+        }
+
+        setPathFetchCount((prevCount) => prevCount + 1);
+        return [...prevPath, newPosition];
+      });
     }, 5000)
   ).current;
 
