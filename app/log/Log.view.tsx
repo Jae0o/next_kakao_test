@@ -55,7 +55,7 @@ const LogView = ({
       {/* Count Information Container */}
       <ul className={style.log__count_list}>
         <li className={style.log__count_item}>
-          Center Fetch Count : {centerFetchCount}
+          Api Call Count : {centerFetchCount}
         </li>
         <li className={style.log__count_item}>
           Path Fetch Count : {pathFetchCount}
