@@ -1,10 +1,10 @@
-import React from 'react';
-import style from './Log.style.module.css';
-import { Position } from './Log.types';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import PathLine from './components/PathLine';
-import CenterMarker from './components/CenterMarker';
-import FallbackIcon from './components/FallbackIcon';
+import React from "react";
+import style from "./Log.style.module.css";
+import { Position } from "./Log.types";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import PathLine from "./components/PathLine";
+import CenterMarker from "./components/CenterMarker";
+import FallbackIcon from "./components/FallbackIcon";
 
 interface LogViewProps {
   isRecording: boolean;
@@ -41,7 +41,6 @@ const LogView = ({
 }: LogViewProps) => {
   return (
     <section className={style.log__layout}>
-      //
       <Map center={center} className={style.log__map}>
         <CenterMarker center={center} />
         {path.length !== 0 && <PathLine path={path} onCreate={onCreate} />}
