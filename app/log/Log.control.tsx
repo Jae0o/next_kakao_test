@@ -82,7 +82,7 @@ const LogPage = () => {
 
         return [...prevPath, newPosition];
       });
-    }, 4500)
+    }, 5000)
   ).current;
 
   const changeCenter = useRef(
