@@ -70,15 +70,16 @@ const LogPage = () => {
       setPath((prevPath) => {
         const prevPosition = prevPath[prevPath.length - 1];
 
-        if (prevPosition) {
-          const pointDistance = distanceFilter(newPosition, prevPosition);
-
-          if (pointDistance < 25 || pointDistance > 80) {
-            return prevPath;
-          }
-        }
-
         setPathFetchCount((prevCount) => prevCount + 1);
+
+        // if (prevPosition) {
+        //   const pointDistance = distanceFilter(newPosition, prevPosition);
+
+        //   if (pointDistance < 25 || pointDistance > 80) {
+        //     return prevPath;
+        //   }
+        // }
+
         return [...prevPath, newPosition];
       });
     }, 0)
