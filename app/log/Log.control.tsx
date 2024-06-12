@@ -81,7 +81,7 @@ const LogPage = () => {
         setPathFetchCount((prevCount) => prevCount + 1);
         return [...prevPath, newPosition];
       });
-    }, 5000)
+    }, 0)
   ).current;
 
   const changeCenter = useRef(
